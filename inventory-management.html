@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management</title>
+    <link rel="stylesheet" href="inventory_management.css">
+</head>
+<body>
+    <div id="inventory" style="display:none;">
+        <h1 id="departmentName">Department Inventory</h1>
+
+        <h2>Inventory Details</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Current Quantity</th>
+                    <th>Ideal Quantity</th>
+                    <th>Action</th>
+                    <th>Verify Order</th>
+                </tr>
+            </thead>
+            <tbody id="inventoryDetails">
+                <!-- Inventory items will be populated here -->
+            </tbody>
+        </table>
+
+        <h2>Order Status</h2>
+        <ul id="orderStatusList">
+            <!-- Order status will be populated here -->
+        </ul>
+    </div>
+
+    <script src="inventory_management.js"></script>
+</body>
+</html>

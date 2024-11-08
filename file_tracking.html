@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Tracking - IIIT Bhubaneswar</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="file-tracking-container">
+        <h2>File Tracking</h2>
+        
+        <!-- Current Status Section -->
+        <div class="current-status">
+            <h3>Current File Status</h3>
+            <p><strong>File ID:</strong> <span id="fileId">12345</span></p>
+            <p><strong>Current Department:</strong> <span id="currentDept">CSE</span></p>
+            <p><strong>Status:</strong> <span id="fileStatus">In Transit</span></p>
+            
+            <!-- Mail Animation -->
+            <div id="mailAnimation">
+                <div class="envelope"></div>
+            </div>
+        </div>
+        
+        <!-- Request a File Section -->
+        <div class="request-file">
+            <h3>Request File from Another Department</h3>
+            <label for="requestDept">Select Department:</label>
+            <select id="requestDept" name="requestDept">
+                <option value="">Select Department</option>
+                <option value="CSE">Computer Science Engineering</option>
+                <option value="ECE">Electronics and Communication Engineering</option>
+                <option value="IT">Information Technology</option>
+                <option value="EEE">Electrical Engineering</option>
+                <option value="ME">Mechanical Engineering</option>
+            </select>
+            <br><br>
+
+            <label for="fileDescription">File Description:</label>
+            <textarea id="fileDescription" name="fileDescription" placeholder="Write about the file you want to request..." rows="4" cols="50"></textarea>
+            <br><br>
+
+            <button onclick="requestFile()">Request File</button>
+        </div>
+
+        <!-- Allow File Departure Section -->
+        <div class="allow-departure">
+            <h3>Allow File Departure</h3>
+            <p><strong>Requesting Department:</strong> <span id="requestingDept">ECE</span></p>
+            <p><strong>Requested File:</strong> <span id="requestedFile">Important Research Document</span></p>
+            
+            <p>Do you want to allow the file to depart to this department?</p>
+            <button onclick="allowDeparture(true)">Yes, Allow Departure</button>
+            <button onclick="allowDeparture(false)">No, Don't Allow</button>
+        </div>
+    </div>
+
+    <script src="file_tracking.js"></script>
+</body>
+</html>
