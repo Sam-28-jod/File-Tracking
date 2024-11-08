@@ -7,10 +7,18 @@
     <link rel="stylesheet" href="inventory_management.css">
 </head>
 <body>
-    <div id="inventory" style="display:none;">
-        <h1 id="departmentName">Department Inventory</h1>
+    <h1>Inventory Management System</h1>
 
-        <h2>Inventory Details</h2>
+    <!-- Department Dropdown -->
+    <label for="departmentDropdown">Select Department: </label>
+    <select id="departmentDropdown" onchange="viewInventory(this.value)">
+        <!-- Departments will be populated here -->
+    </select>
+
+    <div id="inventory" style="display:none;">
+        <h2 id="departmentName">Department Inventory</h2>
+
+        <h3>Inventory Details</h3>
         <table>
             <thead>
                 <tr>
@@ -26,7 +34,7 @@
             </tbody>
         </table>
 
-        <h2>Order Status</h2>
+        <h3>Order Status</h3>
         <ul id="orderStatusList">
             <!-- Order status will be populated here -->
         </ul>

@@ -72,23 +72,40 @@ function checkInventoryLevels(department) {
     });
 }
 
-// Function to verify the order and update inventory
+// Function to verify the order and show "Confirm Order Received" button
 function verifyOrder(department, itemIndex, item) {
+    // Show "Confirm Order Received" button after verifying the order
+    const confirmButton = document.createElement('button');
+    confirmButton.textContent = `Confirm Order Received for ${item.item}`;
+    confirmButton.onclick = () => confirmOrderReceived(department, itemIndex, item);
+
+    // Add the button to the page
+    const buttonContainer = document.getElementById(`verifyButton-${department}-${itemIndex}`);
+    buttonContainer.appendChild(confirmButton);
+
+    alert(`The inventory for ${item.item} has been updated to the ideal quantity.`);
+    
+    // Reload the inventory view
+    viewInventory(department);
+}
+
+// Function to confirm the order is received and update the date
+function confirmOrderReceived(department, itemIndex, item) {
     // Update the inventory to the ideal quantity
     departments[department].inventory[itemIndex].currentQty = item.idealQty;
 
     // Update the order date to the current date
     const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
     departments[department].orders[itemIndex].dueDate = currentDate;
-    departments[department].orders[itemIndex].status = "Completed"; // Mark the order as completed
+    departments[department].orders[itemIndex].status = "Confirmed"; // Mark the order as confirmed
 
-    // Save updated inventory
+    // Save updated inventory and orders
     saveInventory();
 
     // Generate a text file with order details
     generateOrderDetailsFile(department, item, currentDate);
 
-    alert(`The inventory for ${item.item} has been updated to the ideal quantity. Order date updated to ${currentDate}.`);
+    alert(`The order for ${item.item} has been confirmed. Order date updated to ${currentDate}.`);
     
     // Reload the inventory view
     viewInventory(department);
@@ -116,7 +133,7 @@ function generateOrderDetailsFile(department, item, currentDate) {
     link.click(); // Trigger the download
 }
 
-// Function to view inventory
+// Function to view inventory for a specific department
 function viewInventory(department) {
     document.getElementById("inventory").style.display = "block";
     document.getElementById("departmentName").textContent = department + " Inventory";
@@ -146,5 +163,22 @@ function viewInventory(department) {
     checkInventoryLevels(department);
 }
 
-// Initial load: Display the default inventory for the first department
-viewInventory('CSE');
+// Function to populate department dropdown and show inventory based on selection
+function populateDepartmentDropdown() {
+    const departmentDropdown = document.getElementById("departmentDropdown");
+    
+    // Populate the dropdown with department options
+    Object.keys(departments).forEach(department => {
+        const option = document.createElement("option");
+        option.value = department;
+        option.textContent = department;
+        departmentDropdown.appendChild(option);
+    });
+
+    // Default select the first department
+    departmentDropdown.selectedIndex = 0;
+    viewInventory(departmentDropdown.value); // Show inventory for the first department by default
+}
+
+// Initial load: Populate the department dropdown and show inventory for the first department
+populateDepartmentDropdown();
