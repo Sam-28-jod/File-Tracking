@@ -1,19 +1,41 @@
 // file_tracking.js
 
 // Function to simulate requesting a file from another department
-function requestFile() {
+// Function to simulate requesting a file from another department
+async function requestFile() {
     const requestDept = document.getElementById('requestDept').value;
     const fileDescription = document.getElementById('fileDescription').value;
 
-    if (requestDept) {
-        alert(`File has been requested from the ${requestDept} department. Description: ${fileDescription}`);
-        // Update the current department after request
-        document.getElementById('currentDept').textContent = requestDept;
-        document.getElementById('fileStatus').textContent = 'Requested';
+    if (requestDept && fileDescription) {
+        try {
+            // Send the file request to the backend
+            const response = await fetch('http://<SERVER_IP>:3000/request-file', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    department: requestDept,
+                    fileDescription: fileDescription
+                })
+            });
+
+            const data = await response.json();
+
+            // Update the status based on the response
+            alert(data.message);
+
+            // Optionally update the UI with the request details
+            document.getElementById('currentDept').textContent = requestDept;
+            document.getElementById('fileStatus').textContent = 'Requested';
+        } catch (error) {
+            alert('Error sending the request: ' + error.message);
+        }
     } else {
-        alert('Please select a department to request the file from.');
+        alert('Please provide both department and file description.');
     }
 }
+
 
 // Function to simulate allowing or disallowing the file to depart to another department
 function allowDeparture(isAllowed) {
@@ -34,19 +56,54 @@ function allowDeparture(isAllowed) {
         // No change to the department or status
     }
 }
+// Function to check for new file requests from the server
 async function checkForRequests() {
     try {
-        const response = await fetch('http://localhost:3000/current-request');
-        const request = await response.json();
+        // Replace 202.137.211.157 with the IP address of the server
+        const response = await fetch('http://202.137.211.157:3000/current-request');
+        
+        if (response.ok) {
+            const request = await response.json();
 
-        if (request && request.department) {
-            document.getElementById('requestingDept').textContent = request.department;
-            document.getElementById('requestedFile').textContent = request.file;
+            // If there's a new request, update the UI
+            if (request && request.department) {
+                document.getElementById('requestingDept').textContent = request.department;
+                document.getElementById('requestedFile').textContent = request.file;
+            }
+        } else {
+            console.log('Failed to fetch request data');
         }
     } catch (error) {
         console.error('Error fetching requests:', error);
     }
 }
 
+// Function to allow or deny file departure
+async function allowDeparture(isAllowed) {
+    const requestingDept = document.getElementById('requestingDept').textContent;
+    const requestedFile = document.getElementById('requestedFile').textContent;
+
+    try {
+        // Send the response to the server
+        await fetch('http://202.137.211.157:3000/allow-departure', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ isAllowed, requestedFile, requestingDept })
+        });
+
+        // Update the file status based on the response
+        if (isAllowed) {
+            alert(`File "${requestedFile}" has been allowed to depart to the ${requestingDept} department.`);
+        } else {
+            alert(`File "${requestedFile}" has not been allowed to depart to the ${requestingDept} department.`);
+        }
+    } catch (error) {
+        console.error('Error sending response:', error);
+    }
+}
+
 // Poll for new requests every 5 seconds
 setInterval(checkForRequests, 5000);
+
