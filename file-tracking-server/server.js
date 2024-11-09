@@ -21,6 +21,7 @@ app.post('/request-file', (req, res) => {
     console.log(`File requested from ${department}: ${fileDescription}`);
     
     // Send a response back to the frontend
+    res.status(200).json({ message: 'Request received' });
     res.json({ message: `Request for file from ${department} has been received.` });
 });
 
@@ -50,5 +51,5 @@ app.post('/allow-departure', (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running on http://172.168.169.183:${port}`);
 });

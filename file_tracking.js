@@ -60,7 +60,18 @@ function allowDeparture(isAllowed) {
 async function checkForRequests() {
     try {
         // Replace 172.168.169.183 with the IP address of the server
-        const response = await fetch('http://172.168.169.183:3000/current-request');
+        // Update this line in file_tracking.js to use the correct IP address
+const response = await fetch('http://172.168.169.183:3000/request-file', { // Use the actual IP address of your server
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      requestDept: requestDept,
+      fileDescription: fileDescription,
+    }),
+  });
+  
         
         if (response.ok) {
             const request = await response.json();
