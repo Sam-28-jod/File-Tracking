@@ -34,3 +34,19 @@ function allowDeparture(isAllowed) {
         // No change to the department or status
     }
 }
+async function checkForRequests() {
+    try {
+        const response = await fetch('http://localhost:3000/current-request');
+        const request = await response.json();
+
+        if (request && request.department) {
+            document.getElementById('requestingDept').textContent = request.department;
+            document.getElementById('requestedFile').textContent = request.file;
+        }
+    } catch (error) {
+        console.error('Error fetching requests:', error);
+    }
+}
+
+// Poll for new requests every 5 seconds
+setInterval(checkForRequests, 5000);
