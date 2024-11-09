@@ -1,3 +1,39 @@
+// Sample order data for package tracking
+const orderTrackingData = {
+    "12345": { status: "Shipped", estimatedDelivery: "2024-11-15", trackingURL: "https://www.carrier.com/track/12345" },
+    "67890": { status: "In Transit", estimatedDelivery: "2024-11-20", trackingURL: "https://www.carrier.com/track/67890" },
+    "11223": { status: "Delivered", estimatedDelivery: "2024-11-10", trackingURL: "https://www.carrier.com/track/11223" },
+};
+
+// Function to track package based on Order ID
+function trackPackage() {
+    const orderID = document.getElementById("orderID").value.trim();
+    const packageStatusDiv = document.getElementById("packageStatus");
+
+    // Clear previous status
+    packageStatusDiv.innerHTML = "";
+
+    if (orderID === "") {
+        alert("Please enter a valid Order ID.");
+        return;
+    }
+
+    // Check if the order ID exists in our orderTrackingData object
+    const order = orderTrackingData[orderID];
+
+    if (order) {
+        // Display order status
+        packageStatusDiv.innerHTML = `
+            <p>Status: ${order.status}</p>
+            <p>Estimated Delivery: ${order.estimatedDelivery}</p>
+            <p><a href="${order.trackingURL}" target="_blank">Track your package</a></p>
+        `;
+    } else {
+        packageStatusDiv.innerHTML = `<p>No order found with that ID.</p>`;
+    }
+}
+
+// Existing Inventory Management Functions
 // Function to load inventory data from localStorage or use default values if not available
 function loadInventory() {
     const storedData = localStorage.getItem("departments");
@@ -152,7 +188,7 @@ function viewInventory(department) {
     });
     document.getElementById("orderStatusList").innerHTML = orderStatus;
 
-    checkInventoryLevels(department);
+    checkInventoryLevels(department);  // Always check and show the verify button if necessary
 }
 
 // Function to populate department dropdown and show inventory based on selection

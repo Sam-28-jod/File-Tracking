@@ -1,62 +1,139 @@
-/* dashboard.css */
+/* Base reset */
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
+/* General styling */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-}
-
-.dashboard-container {
-    text-align: center;
-    width: 100%;
-    max-width: 600px;
-    padding: 40px;
-    border-radius: 10px;
-    background-color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-    margin-bottom: 30px;
-    font-size: 24px;
+    background: linear-gradient(to right, #4A90E2, #9013FE);
+    font-family: Arial, sans-serif;
     color: #333;
+    overflow: hidden;
+    position: relative;
+    animation: backgroundShift 5s ease-in-out infinite alternate;
 }
 
+/* Background Animation */
+@keyframes backgroundShift {
+    0% { background: linear-gradient(to right, #4A90E2, #9013FE); }
+    100% { background: linear-gradient(to right, #9013FE, #4A90E2); }
+}
+
+/* Decorative floating icons */
+.floating-icon {
+    position: absolute;
+    opacity: 0.1;
+    width: 90px;
+    height: 90px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    animation: float 8s ease-in-out infinite alternate;
+}
+.icon-1 {
+    top: 10%;
+    left: 5%;
+    background-image: url('circle.png');
+}
+.icon-2 {
+    bottom: 15%;
+    right: 5%;
+    background-image: url('triangle.png');
+}
+
+@keyframes float {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-30px); }
+}
+
+/* Container styling */
+.dashboard-container {
+    background-color: #fff;
+    padding: 3rem;
+    width: 100%;
+    max-width: 650px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Title styling */
+.dashboard-container h2 {
+    color: #4A90E2;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    font-weight: bold;
+    animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 20px #9013FE; }
+    to { text-shadow: 0 0 30px #4A90E2; }
+}
+
+/* Dashboard Options Styling */
 .dashboard-options {
     display: flex;
     justify-content: space-between;
-    gap: 20px;
+    gap: 2rem;
 }
 
 .option-box {
     display: block;
-    width: 45%;
-    padding: 20px;
-    background-color: #4CAF50;
-    color: white;
-    text-decoration: none;
+    background: #f9f9f9;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 250px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s ease;
 }
 
 .option-box h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
+    color: #9013FE;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
 }
 
 .option-box p {
-    font-size: 14px;
+    color: #666;
+    font-size: 1rem;
 }
 
+/* Hover effect on option-box */
 .option-box:hover {
-    background-color: #45a049;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    background: #4A90E2;
+    color: #fff;
+}
+
+/* Button hover effect */
+button:hover {
+    background-color: #9013FE;
+}
+
+/* Small screen adjustments */
+@media (max-width: 768px) {
+    .dashboard-options {
+        flex-direction: column;
+        align-items: center;
+    }
 }
