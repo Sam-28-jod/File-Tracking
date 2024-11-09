@@ -53,6 +53,13 @@
             <p>Do you want to allow the file to depart to this department?</p>
             <button onclick="allowDeparture(true)">Yes, Allow Departure</button>
             <button onclick="allowDeparture(false)">No, Don't Allow</button>
+            
+            <!-- Confirm Receipt Section -->
+            <div id="confirmReceiptSection" style="display: none;">
+                <h4>Confirm Receipt of the File</h4>
+                <input type="text" id="receiptConfirmation" placeholder="Enter confirmation text">
+                <button onclick="confirmReceipt()">Confirm Receipt</button>
+            </div>
         </div>
     </div>
 

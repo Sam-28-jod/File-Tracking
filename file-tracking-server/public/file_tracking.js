@@ -63,10 +63,27 @@ function allowDeparture(isAllowed) {
         alert(`File "${requestedFile}" has been allowed to depart to the ${requestingDept} department.`);
         // Update the current department after departure
         document.getElementById('currentDept').textContent = requestingDept;
-        document.getElementById('fileStatus').textContent = 'In Transit';
+        document.getElementById('fileStatus').textContent = 'In Transit';  // Update file status to 'In Transit'
+        document.getElementById('confirmReceiptSection').style.display = 'block'; // Show receipt confirmation section
     } else {
         alert(`File "${requestedFile}" has not been allowed to depart to the ${requestingDept} department.`);
-        // No change to the department or status
+        // Set file status to 'Denied' if not allowed
+        document.getElementById('fileStatus').textContent = 'Denied';  // Update file status to 'Denied'
+        document.getElementById('confirmReceiptSection').style.display = 'none'; // Hide receipt confirmation section
+    }
+}
+
+// Function to confirm the receipt of the file
+function confirmReceipt() {
+    const receiptText = document.getElementById('receiptConfirmation').value;
+
+    if (receiptText) {
+        alert(`Receipt confirmed: ${receiptText}`);
+        // Optionally, update file status after confirmation
+        document.getElementById('fileStatus').textContent = 'Received';  // Change status to 'Received'
+        document.getElementById('confirmReceiptSection').style.display = 'none'; // Hide confirmation section after receipt
+    } else {
+        alert('Please enter confirmation text.');
     }
 }
 
