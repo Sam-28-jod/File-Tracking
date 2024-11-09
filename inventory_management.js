@@ -5,81 +5,48 @@ const orderTrackingData = {
     "11223": { status: "Delivered", estimatedDelivery: "2024-11-10", trackingURL: "https://www.carrier.com/track/11223" },
 };
 
-// Function to track package based on Order ID
-function trackPackage() {
-    const orderID = document.getElementById("orderID").value.trim();
-    const packageStatusDiv = document.getElementById("packageStatus");
-
-    // Clear previous status
-    packageStatusDiv.innerHTML = "";
-
-    if (orderID === "") {
-        alert("Please enter a valid Order ID.");
-        return;
-    }
-
-    // Check if the order ID exists in our orderTrackingData object
-    const order = orderTrackingData[orderID];
-
-    if (order) {
-        // Display order status
-        packageStatusDiv.innerHTML = `
-            <p>Status: ${order.status}</p>
-            <p>Estimated Delivery: ${order.estimatedDelivery}</p>
-            <p><a href="${order.trackingURL}" target="_blank">Track your package</a></p>
-        `;
-    } else {
-        packageStatusDiv.innerHTML = `<p>No order found with that ID.</p>`;
-    }
-}
-
-// Existing Inventory Management Functions
-// Function to load inventory data from localStorage or use default values if not available
+// Load departments data from localStorage or initialize with default if not available
 function loadInventory() {
     const storedData = localStorage.getItem("departments");
-    if (storedData) {
-        return JSON.parse(storedData);
-    } else {
-        const departments = {
-            CSE: {
-                inventory: [
-                    { item: "Laptop", currentQty: 50, idealQty: 100 },
-                    { item: "Projector", currentQty: 5, idealQty: 10 },
-                    { item: "Whiteboard Marker", currentQty: 30, idealQty: 50 }
-                ],
-                orders: [
-                    { tender: "Laptop Order", dueDate: "2024-12-01", status: "Pending" },
-                    { tender: "Projector Repair", dueDate: "2024-11-15", status: "Pending" }
-                ]
-            },
-            ECE: {
-                inventory: [
-                    { item: "Oscilloscope", currentQty: 8, idealQty: 15 },
-                    { item: "Soldering Iron", currentQty: 10, idealQty: 20 },
-                    { item: "Microcontroller Kit", currentQty: 25, idealQty: 30 }
-                ],
-                orders: [
-                    { tender: "Oscilloscope Purchase", dueDate: "2024-12-05", status: "Pending" },
-                    { tender: "Soldering Iron Repair", dueDate: "2024-11-20", status: "Pending" }
-                ]
-            }
-        };
-        return departments;
-    }
+    return storedData ? JSON.parse(storedData) : getDefaultInventory();
 }
 
-// Function to save updated inventory data to localStorage
+// Get default inventory if no data is found in localStorage
+function getDefaultInventory() {
+    return {
+        CSE: {
+            inventory: [
+                { item: "Laptop", currentQty: 50, idealQty: 100 },
+                { item: "Projector", currentQty: 5, idealQty: 10 },
+                { item: "Whiteboard Marker", currentQty: 30, idealQty: 50 }
+            ],
+            orders: []
+        },
+        ECE: {
+            inventory: [
+                { item: "Oscilloscope", currentQty: 8, idealQty: 15 },
+                { item: "Soldering Iron", currentQty: 10, idealQty: 20 },
+                { item: "Microcontroller Kit", currentQty: 25, idealQty: 30 }
+            ],
+            orders: []
+        }
+    };
+}
+
+// Global variable to store the departments data
+let departments = loadInventory();
+
+// Save updated inventory data to localStorage
 function saveInventory() {
     localStorage.setItem("departments", JSON.stringify(departments));
 }
 
-// Inventory data (initially loaded from localStorage or default)
-const departments = loadInventory();
-
-// Function to decrease inventory by 1
+// Function to decrease inventory by 1 and save updates
 function decreaseInventory(itemIndex, department) {
-    if (departments[department].inventory[itemIndex].currentQty > 0) {
-        departments[department].inventory[itemIndex].currentQty -= 1;
+    const item = departments[department].inventory[itemIndex];
+    
+    if (item.currentQty > 0) {
+        item.currentQty -= 1;
         saveInventory();
         viewInventory(department);
     } else {
@@ -87,59 +54,69 @@ function decreaseInventory(itemIndex, department) {
     }
 }
 
-// Function to check inventory levels and prompt if under 10% of the ideal quantity
+// Check inventory levels and add "Verify Order" button if low
 function checkInventoryLevels(department) {
     departments[department].inventory.forEach((item, index) => {
-        const threshold = item.idealQty * 0.1; // 10% of the ideal quantity
+        const threshold = item.idealQty * 0.1;
         const buttonContainer = document.getElementById(`verifyButton-${department}-${index}`);
+        buttonContainer.innerHTML = ""; // Clear any existing button
 
-        // Check if the quantity is less than 10% of ideal quantity
-        if (item.currentQty < threshold && departments[department].orders[index].status !== "Confirmed") {
-            if (!buttonContainer.querySelector('button')) {
-                const verifyButton = document.createElement('button');
-                verifyButton.textContent = `Verify Order for ${item.item}`;
-                verifyButton.onclick = () => verifyOrder(department, index, item);
-                buttonContainer.appendChild(verifyButton);
+        if (item.currentQty < threshold) {
+            const orderExists = departments[department].orders.some(order => order.item === item.item && order.status !== "Confirmed");
+
+            // If no pending order exists, create a new order entry
+            if (!orderExists) {
+                const newOrder = {
+                    item: item.item,
+                    tender: `${item.item} Reorder`,
+                    dueDate: "Pending",
+                    status: "Pending"
+                };
+                departments[department].orders.push(newOrder);
             }
+
+            const verifyButton = document.createElement("button");
+            verifyButton.textContent = `Verify Order for ${item.item}`;
+            verifyButton.onclick = () => verifyOrder(department, index, item);
+            buttonContainer.appendChild(verifyButton);
         }
     });
 }
 
-// Function to verify the order and show "Confirm Order Received" button
+// Verify order and show "Confirm Order Received" button
 function verifyOrder(department, itemIndex, item) {
     const buttonContainer = document.getElementById(`verifyButton-${department}-${itemIndex}`);
-    buttonContainer.innerHTML = '';  // Clear previous buttons
-    
+    buttonContainer.innerHTML = '';
+
     const confirmButton = document.createElement('button');
     confirmButton.textContent = `Confirm Order Received for ${item.item}`;
     confirmButton.onclick = () => confirmOrderReceived(department, itemIndex, item);
-    
+
     buttonContainer.appendChild(confirmButton);
     alert(`The inventory for ${item.item} has been updated to the ideal quantity.`);
 }
 
-// Function to confirm the order is received and update the date
+// Confirm order and update inventory
 function confirmOrderReceived(department, itemIndex, item) {
-    departments[department].inventory[itemIndex].currentQty = item.idealQty;
+    const departmentInventory = departments[department].inventory[itemIndex];
+    const order = departments[department].orders.find(order => order.item === item.item && order.status !== "Confirmed");
 
-    // Update the order date to the current date
-    const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-    departments[department].orders[itemIndex].dueDate = currentDate;
-    departments[department].orders[itemIndex].status = "Confirmed"; // Mark the order as confirmed
+    departmentInventory.currentQty = item.idealQty;
+    const currentDate = new Date().toISOString().split('T')[0];
+    if (order) {
+        order.dueDate = currentDate;
+        order.status = "Confirmed";
+    }
 
-    // Save updated inventory and orders
     saveInventory();
 
-    // Generate a text file with order details
     generateOrderDetailsFile(department, item, currentDate);
-
     alert(`The order for ${item.item} has been confirmed. Order date updated to ${currentDate}.`);
     
-    // Reload the inventory view
     viewInventory(department);
 }
 
-// Function to generate a text file with order details
+// Generate a text file with order details
 function generateOrderDetailsFile(department, item, currentDate) {
     const orderDetails = `
     Order Details for ${department} Department:
@@ -147,21 +124,17 @@ function generateOrderDetailsFile(department, item, currentDate) {
     Current Quantity: ${item.currentQty}
     Ideal Quantity: ${item.idealQty}
     Order Date: ${currentDate}
-    Tender: ${departments[department].orders[departments[department].inventory.indexOf(item)].tender}
     Number of Items Ordered: ${item.idealQty - item.currentQty} items
     `;
-    
-    // Create a Blob from the order details text
+
     const blob = new Blob([orderDetails], { type: "text/plain" });
-    
-    // Create a link to download the text file
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `${item.item}_order_details.txt`; // Filename for the order details text file
-    link.click(); // Trigger the download
+    link.download = `${item.item}_order_details.txt`;
+    link.click();
 }
 
-// Function to view inventory for a specific department
+// View inventory for a specific department
 function viewInventory(department) {
     document.getElementById("inventory").style.display = "block";
     document.getElementById("departmentName").textContent = department + " Inventory";
@@ -182,20 +155,18 @@ function viewInventory(department) {
 
     let orderStatus = "";
     departments[department].orders.forEach(order => {
-        orderStatus += `
-            <li>${order.tender} - Due by: ${order.dueDate} (Status: ${order.status})</li>
-        `;
+        orderStatus += `<li>${order.tender} - Due by: ${order.dueDate} (Status: ${order.status})</li>`;
     });
     document.getElementById("orderStatusList").innerHTML = orderStatus;
 
-    checkInventoryLevels(department);  // Always check and show the verify button if necessary
+    checkInventoryLevels(department);
 }
 
-// Function to populate department dropdown and show inventory based on selection
+// Populate department dropdown and view the first selection's inventory
 function populateDepartmentDropdown() {
     const departmentDropdown = document.getElementById("departmentDropdown");
-    
-    // Populate the dropdown with department options
+    departmentDropdown.innerHTML = "";
+
     Object.keys(departments).forEach(department => {
         const option = document.createElement("option");
         option.value = department;
@@ -203,10 +174,9 @@ function populateDepartmentDropdown() {
         departmentDropdown.appendChild(option);
     });
 
-    // Default select the first department
     departmentDropdown.selectedIndex = 0;
-    viewInventory(departmentDropdown.value); // Show inventory for the first department by default
+    viewInventory(departmentDropdown.value);
 }
 
-// Initial load: Populate the department dropdown and show inventory for the first department
+// Initial load: Populate dropdown and view first department's inventory
 populateDepartmentDropdown();
