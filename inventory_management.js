@@ -55,17 +55,14 @@ function decreaseInventory(itemIndex, department) {
 function checkInventoryLevels(department) {
     departments[department].inventory.forEach((item, index) => {
         const threshold = item.idealQty * 0.1; // 10% of the ideal quantity
-        if (item.currentQty < threshold) {
-            const userConfirmed = confirm(`Warning: The current quantity of ${item.item} is below 10% of the ideal quantity. Would you like to place an order?`);
-            
-            if (userConfirmed) {
-                // If user confirms, show the "Verify Order" button
+        const buttonContainer = document.getElementById(`verifyButton-${department}-${index}`);
+
+        // Check if the quantity is less than 10% of ideal quantity
+        if (item.currentQty < threshold && departments[department].orders[index].status !== "Confirmed") {
+            if (!buttonContainer.querySelector('button')) {
                 const verifyButton = document.createElement('button');
                 verifyButton.textContent = `Verify Order for ${item.item}`;
                 verifyButton.onclick = () => verifyOrder(department, index, item);
-                
-                // Add the button to the page
-                const buttonContainer = document.getElementById(`verifyButton-${department}-${index}`);
                 buttonContainer.appendChild(verifyButton);
             }
         }
@@ -74,24 +71,19 @@ function checkInventoryLevels(department) {
 
 // Function to verify the order and show "Confirm Order Received" button
 function verifyOrder(department, itemIndex, item) {
-    // Show "Confirm Order Received" button after verifying the order
+    const buttonContainer = document.getElementById(`verifyButton-${department}-${itemIndex}`);
+    buttonContainer.innerHTML = '';  // Clear previous buttons
+    
     const confirmButton = document.createElement('button');
     confirmButton.textContent = `Confirm Order Received for ${item.item}`;
     confirmButton.onclick = () => confirmOrderReceived(department, itemIndex, item);
-
-    // Add the button to the page
-    const buttonContainer = document.getElementById(`verifyButton-${department}-${itemIndex}`);
-    buttonContainer.appendChild(confirmButton);
-
-    alert(`The inventory for ${item.item} has been updated to the ideal quantity.`);
     
-    // Reload the inventory view
-    viewInventory(department);
+    buttonContainer.appendChild(confirmButton);
+    alert(`The inventory for ${item.item} has been updated to the ideal quantity.`);
 }
 
 // Function to confirm the order is received and update the date
 function confirmOrderReceived(department, itemIndex, item) {
-    // Update the inventory to the ideal quantity
     departments[department].inventory[itemIndex].currentQty = item.idealQty;
 
     // Update the order date to the current date
@@ -160,7 +152,7 @@ function viewInventory(department) {
     });
     document.getElementById("orderStatusList").innerHTML = orderStatus;
 
-    checkInventoryLevels(department);
+    checkInventoryLevels(department);  // Always check and show the verify button if necessary
 }
 
 // Function to populate department dropdown and show inventory based on selection

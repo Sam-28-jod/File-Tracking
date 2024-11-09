@@ -65,3 +65,49 @@ li {
     margin: 5px 0;
     border-radius: 5px;
 }
+#packageTracking {
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+}
+
+#packageTracking label,
+#packageTracking input {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+#packageTracking input {
+    padding: 8px;
+    width: 80%;
+    margin-right: 10px;
+}
+
+#packageTracking button {
+    padding: 8px 15px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#packageTracking button:hover {
+    background-color: #2980b9;
+}
+
+#packageTracking #packageStatus {
+    margin-top: 20px;
+}
+
+#packageTracking #packageStatus a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+#packageTracking #packageStatus a:hover {
+    text-decoration: underline;
+}
