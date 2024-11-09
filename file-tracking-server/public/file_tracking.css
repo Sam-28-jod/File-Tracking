@@ -5,139 +5,162 @@
     padding: 0;
 }
 
+/* Variables */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333;
+    --primary-color: #4A90E2;
+    --secondary-color: #9013FE;
+    --button-bg: #9013FE;
+    --button-hover-bg: #4A90E2;
+    --glass-bg: rgba(255, 255, 255, 0.2);
+    --border-color: rgba(255, 255, 255, 0.3);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
 /* General styling */
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(to right, #4A90E2, #9013FE);
-    font-family: 'Arial', sans-serif;
-    color: #333;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
     overflow: hidden;
     position: relative;
-    animation: backgroundShift 5s ease-in-out infinite alternate;
+    animation: gradientShift 10s ease-in-out infinite alternate;
 }
 
-/* Background Animation */
-@keyframes backgroundShift {
-    0% { background: linear-gradient(to right, #4A90E2, #9013FE); }
-    100% { background: linear-gradient(to right, #9013FE, #4A90E2); }
+/* Gradient Background Animation */
+@keyframes gradientShift {
+    0% { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); }
+    100% { background: linear-gradient(135deg, var(--secondary-color), var(--primary-color)); }
 }
 
-/* Decorative floating icons */
-.floating-icon {
-    position: absolute;
-    opacity: 0.1;
-    width: 90px;
-    height: 90px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    animation: float 8s ease-in-out infinite alternate;
-}
-.icon-1 {
-    top: 10%;
-    left: 5%;
-    background-image: url('circle.png');
-}
-.icon-2 {
-    bottom: 15%;
-    right: 5%;
-    background-image: url('triangle.png');
-}
-
-@keyframes float {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-30px); }
-}
-
-/* Container styling */
+/* Glassmorphism Container */
 .file-tracking-container {
-    background-color: #fff;
-    padding: 2.5rem;
-    width: 100%;
-    max-width: 550px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border-color);
     border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    padding: 3rem;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     text-align: center;
-    animation: fadeIn 1s ease-in-out;
+    animation: fadeIn 1.2s ease-in-out;
     position: relative;
     z-index: 1;
     overflow: hidden;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(30px); }
+    from { opacity: 0; transform: translateY(50px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Title styling */
+/* Title Styling */
 .file-tracking-container h2 {
-    color: #4A90E2;
-    margin-bottom: 1.5rem;
-    animation: glow 1.5s ease-in-out infinite alternate;
+    font-size: 2rem;
+    color: #ffffff;
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    animation: textGlow 1.5s ease-in-out infinite alternate;
 }
 
-@keyframes glow {
-    from { text-shadow: 0 0 20px #9013FE; }
-    to { text-shadow: 0 0 30px #4A90E2; }
+@keyframes textGlow {
+    from { text-shadow: 0 0 20px var(--secondary-color); }
+    to { text-shadow: 0 0 30px var(--primary-color); }
 }
 
-/* Section styling */
+/* Section Styling with Glass Border */
 .request-file, .allow-departure {
     margin-top: 1.5rem;
     padding: 1.5rem;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .request-file:hover, .allow-departure:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* File Description Box */
+.file-description {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 3px solid var(--border-color); /* Thicker border */
+    border-radius: 30px; /* More rounded corners */
+    padding: 1.5rem; /* Increased padding for more space */
+    margin: 1.5rem 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.file-description:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Dropdown Box Styling */
+select {
+    background: #ffffff; /* White Background */
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.8rem;
+    width: 100%;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    margin-top: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+select:hover {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Button styling */
+/* Neumorphic Button Styling */
 button {
-    padding: 0.8rem 1.5rem;
-    background-color: #9013FE;
+    padding: 0.8rem 2rem;
+    background: var(--button-bg);
     color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: bold;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    font-size: 1rem;
+    box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
 }
 
 button:hover {
-    background-color: #4A90E2;
+    background: var(--button-hover-bg);
     transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 button:active {
     transform: translateY(3px);
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Button ripple effect */
-button::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 300%;
-    height: 300%;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    animation: ripple 0.6s linear;
-}
-
-@keyframes ripple {
-    100% { width: 0; height: 0; opacity: 0; }
+/* Responsive Design */
+@media (max-width: 768px) {
+    .file-tracking-container {
+        width: 90%;
+        padding: 2rem;
+    }
 }
