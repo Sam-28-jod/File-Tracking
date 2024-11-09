@@ -47,8 +47,8 @@ function fetchFileRequest() {
             document.getElementById('requestedFile').textContent = data.fileDescription;
         } else {
             console.log('No current file request.');
-            document.getElementById('requestingDept').textContent = '';
-            document.getElementById('requestedFile').textContent = '';
+            document.getElementById('requestingDept').textContent = 'Waiting for request...';
+            document.getElementById('requestedFile').textContent = 'Waiting for request...';
         }
     })
     .catch(error => console.error('Error fetching request:', error));
