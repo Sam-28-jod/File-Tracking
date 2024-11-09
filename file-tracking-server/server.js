@@ -5,6 +5,9 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
+// In-memory storage for file requests (this simulates a database)
+let currentFileRequest = null;
+
 // Enable CORS to allow requests from different devices
 app.use(cors());
 
@@ -18,21 +21,29 @@ app.use(express.json());
 app.post('/request-file', (req, res) => {
     const { requestDept, fileDescription } = req.body;
 
-    // Ensure requestDept and fileDescription are provided
     if (!requestDept || !fileDescription) {
         return res.status(400).json({ message: 'Department and file description are required.' });
     }
 
+    // Save the request in memory (in a real app, this would be stored in a database)
+    currentFileRequest = { requestDept, fileDescription };
+
     console.log(`Request received to get file from ${requestDept} department. Description: ${fileDescription}`);
 
-    // Simulate a successful request by sending a response
+    // Respond with success and the data
     res.status(200).json({
         message: `File request sent successfully from ${requestDept} department.`,
-        data: {
-            requestDept,
-            fileDescription
-        }
+        data: { requestDept, fileDescription }
     });
+});
+
+// Route to fetch the current file request (GET request)
+app.get('/request-file', (req, res) => {
+    if (currentFileRequest) {
+        res.status(200).json(currentFileRequest);
+    } else {
+        res.status(404).json({ message: 'No current file request.' });
+    }
 });
 
 // Start the server and listen on all network interfaces

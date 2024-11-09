@@ -8,7 +8,8 @@ const validUsers = [
     { designation: 'Professor', password: 'professor123' },
     { designation: 'HOD', password: 'hod456' },
     { designation: 'Student', password: 'student789' },
-    { designation: 'Remit', password: 'remit123'}
+    { designation: 'Remit', password: 'remit123'},
+    { designation: 'Sambhav', password: 'sambhav123'}
 ];
 
 // Function to validate login credentials
