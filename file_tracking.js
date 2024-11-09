@@ -59,8 +59,8 @@ function allowDeparture(isAllowed) {
 // Function to check for new file requests from the server
 async function checkForRequests() {
     try {
-        // Replace 202.137.211.157 with the IP address of the server
-        const response = await fetch('http://202.137.211.157:3000/current-request');
+        // Replace 172.168.169.183 with the IP address of the server
+        const response = await fetch('http://172.168.169.183:3000/current-request');
         
         if (response.ok) {
             const request = await response.json();
@@ -85,7 +85,7 @@ async function allowDeparture(isAllowed) {
 
     try {
         // Send the response to the server
-        await fetch('http://202.137.211.157:3000/allow-departure', {
+        await fetch('http://172.168.169.183:3000/allow-departure', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
