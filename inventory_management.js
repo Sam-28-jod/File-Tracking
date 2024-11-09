@@ -152,7 +152,7 @@ function viewInventory(department) {
     });
     document.getElementById("orderStatusList").innerHTML = orderStatus;
 
-    checkInventoryLevels(department);  // Always check and show the verify button if necessary
+    checkInventoryLevels(department);
 }
 
 // Function to populate department dropdown and show inventory based on selection
