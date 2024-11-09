@@ -18,18 +18,18 @@ body {
 
 /* Container for content */
 .container {
-    background-color: #fff;
+    background: linear-gradient(to right, #4A90E2, #9013FE); /* Match the body gradient */
     padding: 2rem;
     width: 80%;
     max-width: 800px;
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     text-align: center;
+    color: white;  /* White text to contrast with the gradient background */
 }
 
 /* Title styling */
 h1 {
-    color: #4A90E2; /* Consistent title color */
     font-size: 2.5rem;
     font-weight: bold;
     margin-bottom: 1.5rem;
@@ -45,10 +45,12 @@ select {
     padding: 10px;
     font-size: 1rem;
     width: 100%;
-    border: 2px solid black;  /* Black border */
+    border: 2px solid white;  /* White border for consistency */
     border-radius: 5px;
     outline: none;
     margin-bottom: 1rem;
+    background-color: rgba(255, 255, 255, 0.7);  /* Slight transparency to match theme */
+    color: #333;  /* Dark text inside dropdown */
 }
 
 /* Focus effect for select input */
@@ -62,6 +64,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
+    background-color: #fff; /* Set a solid white background for the table */
 }
 
 th, td {
@@ -71,8 +74,17 @@ th, td {
 }
 
 th {
-    background-color: #3498db;
-    color: white;
+    background-color: #3498db; /* Set a solid background for headers */
+    color: white; /* Set header text color to white */
+}
+
+/* Ensure that only the table headings have white font */
+th:nth-child(1), th:nth-child(2), th:nth-child(3) {
+    color: white; /* White color for the "Item", "Current Quantity", and "Ideal Quantity" headers */
+}
+
+td {
+    color: black; /* Black color for all data cells under the headers */
 }
 
 tr:nth-child(even) {
